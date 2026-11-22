@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/Dejv311/morphe-patches-action/compare/v1.0.3...v1.1.0) (2026-11-22)
+
+### ✨ New Features
+
+* **theme:** refine dark palette and compact rounded QR cards ([6a623b2](https://github.com/Dejv311/morphe-patches-action/commit/6a623b2730cb50074850b83aba5ef7e921abfbd5))
+
 ## [1.0.3](https://github.com/Dejv311/morphe-patches-action/compare/v1.0.2...v1.0.3) (2026-11-22)
 
 ### 🐛 Bug Fixes

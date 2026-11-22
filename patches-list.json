@@ -1,10 +1,10 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "patches": [
     {
       "name": "Dark Mode",
-      "description": "Forces dark mode throughout the Action app while keeping the customer card QR code black on white with a scannable white margin.",
+      "description": "Uses a consistent dark palette with readable accents and a compact, rounded customer-card QR code.",
       "default": true,
       "category": null,
       "compatiblePackages": [
@@ -33,7 +33,21 @@
           ]
         }
       ],
-      "options": []
+      "options": [
+        {
+          "key": "qrWhiteBorderModules",
+          "title": "QR white border width",
+          "description": "Width in QR squares. Compact uses one; choose four if a store scanner needs the standard wider quiet zone.",
+          "required": true,
+          "type": "kotlin.Int",
+          "default": 1,
+          "values": {
+            "Compact (1 square)": 1,
+            "Balanced (2 squares)": 2,
+            "Standard (4 squares)": 4
+          }
+        }
+      ]
     },
     {
       "name": "Dark Splash Screen",

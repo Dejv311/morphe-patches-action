@@ -19,7 +19,7 @@ This repository provides a custom patch bundle for Morphe that enhances the offi
 ## Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.3](https://github.com/Dejv311/morphe-patches-action/releases/tag/v1.0.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;3 patches total
+> **[v1.1.0](https://github.com/Dejv311/morphe-patches-action/releases/tag/v1.1.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;3 patches total
 <details open>
 <summary>📦 Action&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
@@ -31,7 +31,7 @@ This repository provides a custom patch bundle for Morphe that enhances the offi
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Dark Mode](#dark-mode) | Forces dark mode throughout the Action app while keeping the customer card QR code black on white with a scannable white margin. |  |
+| [Dark Mode](#dark-mode) | Uses a consistent dark palette with readable accents and a compact, rounded customer-card QR code. | • QR white border width |
 | [Dark Splash Screen](#dark-splash-screen) | Forces dark window and splash screen backgrounds in styles.xml to eliminate the white flash on app startup. |  |
 | [Weekly Deals Sorting](#weekly-deals-sorting) | Adds bidirectional sorting options with interactive chips for Weekly Deals, keeps native filtering/sorting untouched on 'New' and category pages, increases initial deals page limit to 120, and fixes badge label clipping. |  |
 
