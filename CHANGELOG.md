@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/Dejv311/morphe-patches-action/compare/v1.1.0...v1.1.1) (2026-11-22)
+
+### 🐛 Bug Fixes
+
+* **build:** exclude intermediate test bundles from releases ([f494a25](https://github.com/Dejv311/morphe-patches-action/commit/f494a25177208747f52508b177b3a8541a6d4781))
+
 ## [1.1.0](https://github.com/Dejv311/morphe-patches-action/compare/v1.0.3...v1.1.0) (2026-11-22)
 
 ### ✨ New Features
