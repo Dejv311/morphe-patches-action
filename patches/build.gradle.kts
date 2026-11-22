@@ -17,6 +17,7 @@ patches {
 val patchListGeneratorClasspath = configurations.create("patchListGeneratorClasspath")
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     compileOnly(libs.gson)
     patchListGeneratorClasspath(libs.gson)
 }
@@ -35,4 +36,8 @@ tasks {
     publish {
         dependsOn("generatePatchesList")
     }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnit()
 }

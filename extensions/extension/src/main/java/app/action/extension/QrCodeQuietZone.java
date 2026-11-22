@@ -2,37 +2,53 @@ package app.action.extension;
 
 import java.util.Arrays;
 
-/** Pixel-only QR quiet-zone calculations, independent of Android and screen density. */
+/** QR geometry and rounded white-card rendering without Android dependencies. */
 final class QrCodeQuietZone {
     private static final int BLACK = 0xFF000000;
     private static final int WHITE = 0xFFFFFFFF;
 
     private QrCodeQuietZone() {}
 
-    static int requiredPadding(int[] pixels, int width, int height) {
-        // The renderer also handles linear barcodes; their layout must stay unchanged.
-        if (width != height || width < 21) return 0;
+    static final class Card {
+        final int[] pixels;
+        final int size;
+        final int margin;
+        final int moduleSize;
+
+        Card(int[] pixels, int size, int margin, int moduleSize) {
+            this.pixels = pixels;
+            this.size = size;
+            this.margin = margin;
+            this.moduleSize = moduleSize;
+        }
+    }
+
+    static Card render(int[] pixels, int width, int height, int borderModules) {
+        // This shared renderer also handles linear barcodes and other images.
+        if (pixels == null || width != height || width < 21
+                || (long) width * height != pixels.length) return null;
+        if (borderModules < 1 || borderModules > 4) {
+            throw new IllegalArgumentException("QR border must be between one and four modules");
+        }
 
         int first = 0;
         while (first < pixels.length && pixels[first] != BLACK) first++;
-        if (first == pixels.length) return 0;
-
+        if (first == pixels.length) return null;
         int left = first % width;
         int top = first / width;
         int end = left;
         while (end < width && pixels[top * width + end] == BLACK) end++;
         int finderWidth = end - left;
-        if (finderWidth < 7 || top + finderWidth > height) return 0;
+        if (finderWidth < 7 || top + finderWidth > height) return null;
 
-        // A QR finder is seven modules wide. Check its black/white pattern before
-        // treating an arbitrary square bitmap as a QR code.
+        // Validate the seven-by-seven QR finder before changing any image.
         for (int row = 0; row < 7; row++) {
             int y = top + (2 * row + 1) * finderWidth / 14;
             for (int column = 0; column < 7; column++) {
                 int x = left + (2 * column + 1) * finderWidth / 14;
                 boolean expectedBlack = row == 0 || row == 6 || column == 0 || column == 6
                         || (row >= 2 && row <= 4 && column >= 2 && column <= 4);
-                if ((pixels[y * width + x] == BLACK) != expectedBlack) return 0;
+                if ((pixels[y * width + x] == BLACK) != expectedBlack) return null;
             }
         }
 
@@ -49,23 +65,34 @@ final class QrCodeQuietZone {
                 maxY = Math.max(maxY, y);
             }
         }
+        if (maxX - minX != maxY - minY) return null;
 
-        int existingMargin = Math.min(Math.min(minX, minY),
-                Math.min(width - maxX - 1, height - maxY - 1));
-        // QR codes require at least four white modules on every side. Round up
-        // for bitmaps whose finder width is not a multiple of seven pixels.
         int moduleSize = (finderWidth + 6) / 7;
-        return Math.max(0, 4 * moduleSize - existingMargin);
-    }
-
-    static int[] addPadding(int[] pixels, int width, int height, int padding) {
-        int paddedWidth = width + 2 * padding;
-        int[] result = new int[paddedWidth * (height + 2 * padding)];
+        int margin = borderModules * moduleSize;
+        int codeSize = maxX - minX + 1;
+        int size = codeSize + 2 * margin;
+        int[] result = new int[size * size];
         Arrays.fill(result, WHITE);
-        for (int row = 0; row < height; row++) {
-            System.arraycopy(pixels, row * width, result,
-                    (row + padding) * paddedWidth + padding, width);
+        // Remove only surplus white space, then copy the QR itself pixel for pixel.
+        for (int y = 0; y < codeSize; y++) {
+            System.arraycopy(pixels, (minY + y) * width + minX,
+                    result, (margin + y) * size + margin, codeSize);
         }
-        return result;
+
+        // The radius never reaches the QR data. Only the outer white corners
+        // become transparent, with a one-pixel antialiased edge.
+        int radius = moduleSize;
+        for (int y = 0; y < radius; y++) {
+            for (int x = 0; x < radius; x++) {
+                double distance = Math.hypot(radius - x - 0.5, radius - y - 0.5);
+                int alpha = (int) Math.round(255 * Math.max(0, Math.min(1, radius + 0.5 - distance)));
+                int color = (alpha << 24) | 0x00FFFFFF;
+                result[y * size + x] = color;
+                result[y * size + size - x - 1] = color;
+                result[(size - y - 1) * size + x] = color;
+                result[(size - y - 1) * size + size - x - 1] = color;
+            }
+        }
+        return new Card(result, size, margin, moduleSize);
     }
 }

@@ -36,10 +36,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Test customer card QR quiet zone
+      - name: Test customer card QR and dark palette
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :extensions:extension:testQrCodeQuietZone --no-daemon
+        run: ./gradlew :extensions:extension:testQrCodeQuietZone :patches:test --no-daemon
 
       # Semantic release runs its own Gradle build command.
       # Only dev and main branch will generate a release as specified by .releaserc
