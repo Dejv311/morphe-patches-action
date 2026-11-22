@@ -39,7 +39,7 @@ jobs:
       - name: Test customer card QR quiet zone
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :extensions:extension:testReleaseUnitTest --no-daemon
+        run: ./gradlew :extensions:extension:testQrCodeQuietZone --no-daemon
 
       # Semantic release runs its own Gradle build command.
       # Only dev and main branch will generate a release as specified by .releaserc
