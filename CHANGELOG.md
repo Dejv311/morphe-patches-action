@@ -1,3 +1,9 @@
+## [1.0.3](https://github.com/Dejv311/morphe-patches-action/compare/v1.0.2...v1.0.3) (2026-11-22)
+
+### 🐛 Bug Fixes
+
+* **dark-mode:** add a white quiet zone around customer card QR codes ([8105e23](https://github.com/Dejv311/morphe-patches-action/commit/8105e2335b91aac44be346e6e32f2d9804e76570))
+
 ## 1.0.0 (2026-11-22)
 
 ### 🐛 Bug Fixes

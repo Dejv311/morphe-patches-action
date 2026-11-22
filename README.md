@@ -19,7 +19,7 @@ This repository provides a custom patch bundle for Morphe that enhances the offi
 ## Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.0](https://github.com/Dejv311/morphe-patches-action/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;3 patches total
+> **[v1.0.3](https://github.com/Dejv311/morphe-patches-action/releases/tag/v1.0.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;3 patches total
 <details open>
 <summary>📦 Action&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
