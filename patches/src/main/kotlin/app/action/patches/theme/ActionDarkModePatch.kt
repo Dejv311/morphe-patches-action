@@ -4,7 +4,10 @@ import app.action.patches.shared.Constants.COMPATIBILITY_ACTION
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.bytecodePatch
+import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+
+private const val QR_EXTENSION_CLASS = "Lapp/action/extension/QrCodeExtension;"
 
 private data class ColorOverride(
     val field: String,
@@ -15,10 +18,13 @@ private data class ColorOverride(
 @Suppress("unused")
 val actionDarkModePatch = bytecodePatch(
     name = "Dark Mode",
-    description = "Forces dark mode throughout the Action app by overriding the core Jetpack Compose color palette and customer card QR code.",
+    description = "Forces dark mode throughout the Action app while keeping the customer card QR code black on white with a scannable white margin.",
     default = true
 ) {
     compatibleWith(COMPATIBILITY_ACTION)
+
+    // Dark Mode must include its QR helper even when Weekly Deals Sorting is disabled.
+    extendWith("extensions/extension.mpe")
 
     execute {
         val returnIndex = PaletteClinitFingerprint.instructionMatches.last().index
@@ -128,11 +134,34 @@ val actionDarkModePatch = bytecodePatch(
         val bgMoveInstruction = QrCodeBitmapFingerprint.instructionMatches[3]
         val bgMoveIndex = bgMoveInstruction.index
 
-        // Replace background color assignment (move v8, v0) with white constant (const/4 v8, -1)
-        qrMethod.replaceInstruction(bgMoveIndex, "const/4 v8, -0x1")
+        val backgroundRegister = (bgMoveInstruction.instruction as OneRegisterInstruction).registerA
+        qrMethod.replaceInstruction(bgMoveIndex, "const/16 v$backgroundRegister, -0x1")
 
         // Force foreground color parameter (p1) to solid black (0xFF000000) at method entry
         qrMethod.addInstructions(0, "const/high16 p1, -0x1000000")
+
+        // Keep the QR's required quiet zone inside its bitmap so the surrounding dark
+        // Compose surface cannot meet the outer black modules. Replace each return
+        // in place so branches targeting it also execute the helper. No new registers
+        // are needed, and /range supports return registers above v15.
+        val qrReturns = qrMethod.implementation!!.instructions.withIndex()
+            .filter { it.value.opcode == Opcode.RETURN_OBJECT }
+            .map { it.index to (it.value as OneRegisterInstruction).registerA }
+        check(qrReturns.isNotEmpty()) { "QR bitmap renderer has no object return" }
+        for ((index, register) in qrReturns.asReversed()) {
+            qrMethod.replaceInstruction(
+                index,
+                "invoke-static/range {v$register .. v$register}, " +
+                    "$QR_EXTENSION_CLASS->addWhiteQuietZone(Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;"
+            )
+            qrMethod.addInstructions(
+                index + 1,
+                """
+                    move-result-object v$register
+                    return-object v$register
+                """
+            )
+        }
 
         // Override DropdownMenu (Material 3 popup) background container color in g3.l.a
         // When containerColor is unspecified (0L), it defaults to Material 3 light SurfaceContainer (#F3EDF7).

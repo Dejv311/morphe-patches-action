@@ -2,7 +2,7 @@
 
 Custom Morphe patches for the official Action store Android app (`com.action.consumerapp`).
 
-Fork of [janowakps/morphe-patches-action](https://github.com/janowakps/morphe-patches-action). The v1.0.2 patch bundle is included unchanged in `bundles/patches-1.0.2.mpp`; credit belongs to the original authors. Morphe downloads this file directly from this repository.
+Fork of [janowakps/morphe-patches-action](https://github.com/janowakps/morphe-patches-action), with a customer card QR scanning fix for dark mode. Credit for the original patches belongs to the upstream authors.
 
 ## About
 
@@ -45,7 +45,7 @@ This repository provides a custom patch bundle for Morphe that enhances the offi
 Forces an eye-friendly, deeply integrated dark theme throughout the entire Action app:
 - **Core Jetpack Compose Palette Override**: Systematically maps and overrides the central `ai.b` palette (background `#121212`, surfaces `#1E1E1E`, card tiles `#282828`).
 - **Product Card Contrast**: Uses a gentle dark gray `#282828` for product card backgrounds so transparent PNG product photos (including dark items) contrast clearly with the card surface.
-- **Customer Card QR Code Protection**: Guarantees that the customer card barcode and QR code remain solid black on a white background, ensuring reliable scanning by physical store barcode readers.
+- **Customer Card QR Code Protection**: Keeps the customer card barcode and QR code solid black on white. QR codes also receive a white quiet zone at least four modules wide on every side so the dark screen does not touch the code. Existing margins are reused; the code's pixels and contents are preserved, and linear barcodes keep their original layout. This protection also works when Weekly Deals Sorting is disabled.
 
 ### Dark Splash Screen
 Eliminates the jarring white flash on app startup by overriding window background and splash screen styles in `styles.xml`.
