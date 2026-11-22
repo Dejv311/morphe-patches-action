@@ -4,10 +4,10 @@ patches {
     about {
         name = "Action Dark Mode Patches"
         description = "Morphe patches for Action app (com.action.consumerapp)"
-        source = "https://github.com/janowakps/morphe-patches-action.git"
+        source = "https://github.com/Dejv311/morphe-patches-action.git"
         author = "janowakps"
         contact = "na"
-        website = "https://github.com/janowakps/morphe-patches-action"
+        website = "https://github.com/Dejv311/morphe-patches-action"
         license = "GPLv3"
     }
 }
