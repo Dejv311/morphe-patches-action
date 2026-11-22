@@ -1,3 +1,15 @@
+## 1.0.0 (2026-11-22)
+
+### 🐛 Bug Fixes
+
+* **dark-mode:** add a white quiet zone around customer card QR codes ([8105e23](https://github.com/Dejv311/morphe-patches-action/commit/8105e2335b91aac44be346e6e32f2d9804e76570))
+* **theme:** fix DropdownMenu fingerprint matching in dark mode ([d32834f](https://github.com/Dejv311/morphe-patches-action/commit/d32834f47b1770721abf8ac36dda531218d39738))
+* **theme:** force dark background on DropdownMenu popup in dark mode ([8f29ba9](https://github.com/Dejv311/morphe-patches-action/commit/8f29ba994f70733b15f4fb5826cb07abe672ba94))
+
+### ✨ New Features
+
+* initial release of Action Morphe patches ([4797c67](https://github.com/Dejv311/morphe-patches-action/commit/4797c672f9a43e26886b38f2db1deae3358feda6))
+
 ## [1.0.2](https://github.com/janowakps/morphe-patches-action/compare/v1.0.1...v1.0.2) (2026-10-18)
 
 ### 🐛 Bug Fixes
