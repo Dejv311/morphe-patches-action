@@ -2,6 +2,8 @@
 
 Custom Morphe patches for the official Action store Android app (`com.action.consumerapp`).
 
+Fork of [janowakps/morphe-patches-action](https://github.com/janowakps/morphe-patches-action). The v1.0.2 patch bundle is republished unchanged from the original project; credit belongs to its authors.
+
 ## About
 
 This repository provides a custom patch bundle for Morphe that enhances the official Action Android application with a fully integrated Dark Theme, Dark Splash Screen, and advanced interactive sorting for Weekly Deals.
@@ -10,14 +12,14 @@ This repository provides a custom patch bundle for Morphe that enhances the offi
 
 1. Open **Morphe Manager** on your Android device.
 2. Go to **Settings** > **Sources**.
-3. Add custom source: `https://github.com/janowakps/morphe-patches-action`
-4. Or tap this link on your device: [Add to Morphe](https://morphe.software/add-source?github=janowakps/morphe-patches-action)
+3. Add custom source: `https://github.com/Dejv311/morphe-patches-action`
+4. Or tap this link on your device: [Add to Morphe](https://morphe.software/add-source?github=Dejv311/morphe-patches-action)
 5. Select **Action**, choose your desired patches, and patch the app!
 
 ## Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.2](https://github.com/janowakps/morphe-patches-action/releases/tag/v1.0.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;3 patches total
+> **[v1.0.2](https://github.com/Dejv311/morphe-patches-action/releases/tag/v1.0.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;3 patches total
 <details open>
 <summary>📦 Action&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
