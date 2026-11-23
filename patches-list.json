@@ -1,10 +1,10 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "patches": [
     {
       "name": "Dark Mode",
-      "description": "Uses a consistent dark palette with readable accents and a compact, rounded customer-card QR code.",
+      "description": "Uses true-black OLED backgrounds, neutral gray surfaces, saturated accents, and a compact QR card with smooth corners.",
       "default": true,
       "category": null,
       "compatiblePackages": [
@@ -51,7 +51,7 @@
     },
     {
       "name": "Dark Splash Screen",
-      "description": "Forces dark window and splash screen backgrounds in styles.xml to eliminate the white flash on app startup.",
+      "description": "Forces true-black window and splash screen backgrounds in styles.xml to eliminate the white flash on app startup.",
       "default": true,
       "category": null,
       "compatiblePackages": [

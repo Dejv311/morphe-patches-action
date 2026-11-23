@@ -1,3 +1,9 @@
+## [1.1.2](https://github.com/Dejv311/morphe-patches-action/compare/v1.1.1...v1.1.2) (2026-11-23)
+
+### 🐛 Bug Fixes
+
+* **theme:** render smooth QR corners and use true OLED colors ([19f3aca](https://github.com/Dejv311/morphe-patches-action/commit/19f3aca584bd9edbf103792a510dbf046ac0aa84))
+
 ## [1.1.1](https://github.com/Dejv311/morphe-patches-action/compare/v1.1.0...v1.1.1) (2026-11-22)
 
 ### 🐛 Bug Fixes
