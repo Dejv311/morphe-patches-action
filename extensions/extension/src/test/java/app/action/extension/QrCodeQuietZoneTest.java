@@ -18,23 +18,24 @@ import static org.junit.Assert.*;
 public class QrCodeQuietZoneTest {
     private static final int BLACK = 0xFF000000;
     private static final int WHITE = 0xFFFFFFFF;
-    private static final int BACKGROUND = 0xFF101418;
+    private static final int BACKGROUND = 0xFF000000;
 
     @Test
     public void compactAndStandardCardsDecodeAgainstDarkBackground() throws Exception {
         for (String content : new String[] {"L1234567890123", "QR regression " + "1234567890".repeat(12)}) {
             BitMatrix modules = qr(content);
-            for (int scale : new int[] {2, 3, 10}) {
+            for (int scale : new int[] {1, 2, 3, 10}) {
                 int width = modules.getWidth() * scale;
                 int[] original = render(modules, scale, 0);
                 for (int borderModules : new int[] {1, 2, 4}) {
                     QrCodeQuietZone.Card card = QrCodeQuietZone.render(original, width, width, borderModules);
                     assertNotNull(card);
-                    assertEquals(borderModules * scale, card.margin);
-                    assertEquals(width + 2 * card.margin, card.size);
-                    for (int y = 0; y < width; y++) {
-                        for (int x = 0; x < width; x++) {
-                            assertEquals(original[y * width + x],
+                    assertEquals(borderModules * card.moduleSize, card.margin);
+                    assertEquals(width * card.pixelScale + 2 * card.margin, card.size);
+                    int renderedWidth = width * card.pixelScale;
+                    for (int y = 0; y < renderedWidth; y++) {
+                        for (int x = 0; x < renderedWidth; x++) {
+                            assertEquals(original[(y / card.pixelScale) * width + x / card.pixelScale],
                                     card.pixels[(y + card.margin) * card.size + x + card.margin]);
                         }
                     }
@@ -74,8 +75,8 @@ public class QrCodeQuietZoneTest {
                 int width = (modules.getWidth() + 2 * existing) * scale;
                 QrCodeQuietZone.Card card = QrCodeQuietZone.render(render(modules, scale, existing), width, width, 1);
                 assertNotNull(card);
-                assertEquals(scale, card.margin);
-                assertEquals((modules.getWidth() + 2) * scale, card.size);
+                assertEquals(card.moduleSize, card.margin);
+                assertEquals((modules.getWidth() + 2) * card.moduleSize, card.size);
             }
         }
     }
@@ -97,6 +98,35 @@ public class QrCodeQuietZoneTest {
             if (alpha > 0 && alpha < 255) antialiased = true;
         }
         assertTrue("Outer corners should have smooth alpha edges", antialiased);
+    }
+
+    @Test
+    public void singlePixelModulesGetEnoughResolutionForRoundedCorners() throws Exception {
+        BitMatrix modules = qr("L1234567890123");
+        int width = modules.getWidth();
+        QrCodeQuietZone.Card card = QrCodeQuietZone.render(render(modules, 1, 0), width, width, 1);
+        assertNotNull(card);
+        assertEquals(16, card.pixelScale);
+        assertEquals(16, card.moduleSize);
+        assertEquals(16, card.margin);
+        assertTrue(card.size >= 320);
+        int edgePixels = 0;
+        for (int pixel : card.pixels) {
+            int alpha = pixel >>> 24;
+            if (alpha > 0 && alpha < 255) edgePixels++;
+        }
+        assertTrue("Rounded corners need multiple alpha samples", edgePixels >= 16);
+    }
+
+    @Test
+    public void limitsUpscalingForDenseQrCodes() throws Exception {
+        BitMatrix modules = qr("DENSE-QR-" + "1234567890".repeat(220));
+        int width = modules.getWidth();
+        QrCodeQuietZone.Card card = QrCodeQuietZone.render(render(modules, 1, 0), width, width, 4);
+        assertNotNull(card);
+        assertTrue(card.size <= QrCodeQuietZone.MAX_UPSCALED_CARD_SIZE);
+        assertTrue(card.pixelScale >= 1);
+        assertEquals(4 * card.moduleSize, card.margin);
     }
 
     @Test

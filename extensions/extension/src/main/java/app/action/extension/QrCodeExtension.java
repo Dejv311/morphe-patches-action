@@ -21,7 +21,8 @@ public final class QrCodeExtension {
         QrCodeQuietZone.Card card = QrCodeQuietZone.render(pixels, width, height, whiteBorderModules);
         if (card == null) return bitmap;
         Bitmap result = Bitmap.createBitmap(card.pixels, card.size, card.size, Bitmap.Config.ARGB_8888);
-        result.setDensity(bitmap.getDensity());
+        int density = bitmap.getDensity();
+        result.setDensity(density == Bitmap.DENSITY_NONE ? density : density * card.pixelScale);
         return result;
     }
 }

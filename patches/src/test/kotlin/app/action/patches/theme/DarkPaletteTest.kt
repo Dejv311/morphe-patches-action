@@ -37,6 +37,27 @@ class DarkPaletteTest {
     }
 
     @Test
+    fun oledUsesBlackAndNeutralSurfacesWithSaturatedAccents() {
+        assertEquals(0xFF000000L, colors.getValue("a"))
+        for (field in listOf("a", "c", "b", "f", "d", "e", "g", "h", "A0",
+            "i", "j", "k", "J", "K", "L", "P", "Q", "R", "p", "q", "r",
+            "v", "w", "x", "C", "D", "E", "V", "W", "X", "Y", "Z", "a0",
+            "b0", "c0", "d0", "h0", "i0", "j0", "n0", "t0", "q0", "w0", "x0")) {
+            val color = colors.getValue(field)
+            val red = (color shr 16) and 255L
+            val green = (color shr 8) and 255L
+            val blue = color and 255L
+            assertEquals("Neutral red/green for $field", red, green)
+            assertEquals("Neutral green/blue for $field", green, blue)
+        }
+        for (field in listOf("l", "M", "S", "s", "y", "F", "e0", "k0", "o0", "u0", "r0", "y0")) {
+            val color = colors.getValue(field)
+            val channels = listOf((color shr 16) and 255L, (color shr 8) and 255L, color and 255L)
+            assertTrue("Saturated accent $field", channels.max() - channels.min() >= 128L)
+        }
+    }
+
+    @Test
     fun coloredTextStaysReadableOnItsTintedContainers() {
         for ((background, foreground) in listOf(
             "i" to "l", "j" to "o", "k" to "o",

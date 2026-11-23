@@ -6,7 +6,7 @@ import app.morphe.patcher.patch.resourcePatch
 @Suppress("unused")
 val actionSplashPatch = resourcePatch(
     name = "Dark Splash Screen",
-    description = "Forces dark window and splash screen backgrounds in styles.xml to eliminate the white flash on app startup.",
+    description = "Forces true-black window and splash screen backgrounds in styles.xml to eliminate the white flash on app startup.",
     default = true
 ) {
     compatibleWith(COMPATIBILITY_ACTION)
@@ -18,17 +18,17 @@ val actionSplashPatch = resourcePatch(
             content = content
                 .replace(
                     """<item name="android:colorBackground">@color/white</item>""",
-                    """<item name="android:colorBackground">#FF121212</item>"""
+                    """<item name="android:colorBackground">#FF000000</item>"""
                 )
                 .replace(
                     """<item name="android:windowBackground">@color/white</item>""",
-                    """<item name="android:windowBackground">#FF121212</item>"""
+                    """<item name="android:windowBackground">#FF000000</item>"""
                 )
                 .replace(
                     """<style name="WhiteBackground" parent="@style/AppTheme">""",
                     """<style name="WhiteBackground" parent="@style/AppTheme">
-        <item name="android:windowBackground">#FF121212</item>
-        <item name="android:colorBackground">#FF121212</item>"""
+        <item name="android:windowBackground">#FF000000</item>
+        <item name="android:colorBackground">#FF000000</item>"""
                 )
             stylesFile.writeText(content)
         }
@@ -41,8 +41,8 @@ val actionSplashPatch = resourcePatch(
                     "</resources>",
                     """
     <style name="WhiteBackground" parent="@style/AppTheme">
-        <item name="android:windowSplashScreenBackground">#FF121212</item>
-        <item name="android:windowBackground">#FF121212</item>
+        <item name="android:windowSplashScreenBackground">#FF000000</item>
+        <item name="android:windowBackground">#FF000000</item>
     </style>
 </resources>"""
                 )

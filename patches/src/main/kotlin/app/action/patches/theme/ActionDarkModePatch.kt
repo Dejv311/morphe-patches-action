@@ -13,7 +13,7 @@ private const val QR_EXTENSION_CLASS = "Lapp/action/extension/QrCodeExtension;"
 @Suppress("unused")
 val actionDarkModePatch = bytecodePatch(
     name = "Dark Mode",
-    description = "Uses a consistent dark palette with readable accents and a compact, rounded customer-card QR code.",
+    description = "Uses true-black OLED backgrounds, neutral gray surfaces, saturated accents, and a compact QR card with smooth corners.",
     default = true
 ) {
     compatibleWith(COMPATIBILITY_ACTION)

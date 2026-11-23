@@ -662,10 +662,10 @@ public final class ActionExtension {
             yMethod.invoke(null, composer, onNodeSetter);
             cMethod.invoke(null, materializedModifier, composer, modifierSetter);
 
-            // Resolve palette colors (with dark mode defaults)
-            long selectedBgColor = 0xFF5C9CFFL;   // darkBlue500
-            long unselectedBgColor = 0xFF1E1E1EL; // neutral50
-            long borderColor = 0xFF484848L;       // neutral300
+            // Compose sRGB colors pack ARGB into the upper 32 bits, including fallbacks.
+            long selectedBgColor = 0xFF3D8BFF00000000L;   // darkBlue500
+            long unselectedBgColor = 0xFF0D0D0D00000000L; // neutral50
+            long borderColor = 0xFF78787800000000L;       // neutral300
             try {
                 Object palette = cl.loadClass("ai.a").getMethod("a", cl.loadClass("k3.j")).invoke(null, composer);
                 Class<?> paletteClass = palette.getClass();

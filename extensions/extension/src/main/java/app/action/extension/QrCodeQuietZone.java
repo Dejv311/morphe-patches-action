@@ -6,6 +6,8 @@ import java.util.Arrays;
 final class QrCodeQuietZone {
     private static final int BLACK = 0xFF000000;
     private static final int WHITE = 0xFFFFFFFF;
+    static final int MIN_MODULE_PIXELS = 16;
+    static final int MAX_UPSCALED_CARD_SIZE = 1024;
 
     private QrCodeQuietZone() {}
 
@@ -14,12 +16,14 @@ final class QrCodeQuietZone {
         final int size;
         final int margin;
         final int moduleSize;
+        final int pixelScale;
 
-        Card(int[] pixels, int size, int margin, int moduleSize) {
+        Card(int[] pixels, int size, int margin, int moduleSize, int pixelScale) {
             this.pixels = pixels;
             this.size = size;
             this.margin = margin;
             this.moduleSize = moduleSize;
+            this.pixelScale = pixelScale;
         }
     }
 
@@ -67,16 +71,31 @@ final class QrCodeQuietZone {
         }
         if (maxX - minX != maxY - minY) return null;
 
-        int moduleSize = (finderWidth + 6) / 7;
+        int sourceModuleSize = (finderWidth + 6) / 7;
+        int sourceCodeSize = maxX - minX + 1;
+        int sourceCardSize = sourceCodeSize + 2 * borderModules * sourceModuleSize;
+        int desiredScale = (MIN_MODULE_PIXELS + sourceModuleSize - 1) / sourceModuleSize;
+        int maximumScale = Math.max(1, MAX_UPSCALED_CARD_SIZE / sourceCardSize);
+        int pixelScale = Math.min(desiredScale, maximumScale);
+        int moduleSize = sourceModuleSize * pixelScale;
         int margin = borderModules * moduleSize;
-        int codeSize = maxX - minX + 1;
+        int codeSize = sourceCodeSize * pixelScale;
         int size = codeSize + 2 * margin;
         int[] result = new int[size * size];
         Arrays.fill(result, WHITE);
-        // Remove only surplus white space, then copy the QR itself pixel for pixel.
+        // The source can be just one pixel per QR module. Enlarge by an integer
+        // factor before drawing corners, using nearest-neighbour copying only.
+        // Existing high-resolution codes are never downsampled.
         for (int y = 0; y < codeSize; y++) {
-            System.arraycopy(pixels, (minY + y) * width + minX,
-                    result, (margin + y) * size + margin, codeSize);
+            int sourceRow = (minY + y / pixelScale) * width + minX;
+            int destinationRow = (margin + y) * size + margin;
+            if (pixelScale == 1) {
+                System.arraycopy(pixels, sourceRow, result, destinationRow, codeSize);
+            } else {
+                for (int x = 0; x < codeSize; x++) {
+                    result[destinationRow + x] = pixels[sourceRow + x / pixelScale];
+                }
+            }
         }
 
         // The radius never reaches the QR data. Only the outer white corners
@@ -93,6 +112,6 @@ final class QrCodeQuietZone {
                 result[(size - y - 1) * size + size - x - 1] = color;
             }
         }
-        return new Card(result, size, margin, moduleSize);
+        return new Card(result, size, margin, moduleSize, pixelScale);
     }
 }

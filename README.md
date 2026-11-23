@@ -2,7 +2,7 @@
 
 Custom Morphe patches for the official Action store Android app (`com.action.consumerapp`).
 
-Fork of [janowakps/morphe-patches-action](https://github.com/janowakps/morphe-patches-action), with a refined dark palette and a compact, rounded customer card QR code. Credit for the original patches belongs to the upstream authors.
+Fork of [janowakps/morphe-patches-action](https://github.com/janowakps/morphe-patches-action), with an OLED palette and a compact customer card QR code with smooth rounded corners. Credit for the original patches belongs to the upstream authors.
 
 ## About
 
@@ -31,8 +31,8 @@ This repository provides a custom patch bundle for Morphe that enhances the offi
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Dark Mode](#dark-mode) | Uses a consistent dark palette with readable accents and a compact, rounded customer-card QR code. | • QR white border width |
-| [Dark Splash Screen](#dark-splash-screen) | Forces dark window and splash screen backgrounds in styles.xml to eliminate the white flash on app startup. |  |
+| [Dark Mode](#dark-mode) | Uses true-black OLED backgrounds, neutral gray surfaces, saturated accents, and a compact QR card with smooth corners. | • QR white border width |
+| [Dark Splash Screen](#dark-splash-screen) | Forces true-black window and splash screen backgrounds in styles.xml to eliminate the white flash on app startup. |  |
 | [Weekly Deals Sorting](#weekly-deals-sorting) | Adds bidirectional sorting options with interactive chips for Weekly Deals, keeps native filtering/sorting untouched on 'New' and category pages, increases initial deals page limit to 120, and fixes badge label clipping. |  |
 
 </details>
@@ -42,11 +42,11 @@ This repository provides a custom patch bundle for Morphe that enhances the offi
 ## Features & Included Patches
 
 ### Dark Mode
-Forces an eye-friendly, deeply integrated dark theme throughout the entire Action app:
-- **Core Jetpack Compose Palette Override**: Systematically maps and overrides the central `ai.b` palette (background `#121212`, surfaces `#1E1E1E`, card tiles `#282828`).
-- **Product Card Contrast**: Uses a gentle dark gray `#282828` for product card backgrounds so transparent PNG product photos (including dark items) contrast clearly with the card surface.
-- **Consistent Dark Palette**: Defines 78 coordinated surface, text, border and accent tokens. Previously omitted middle shades are covered, and popup menus use the same card surface. Only fields present in the matched palette are patched. Regression tests check text contrast on the intended surfaces and colored containers.
-- **Compact Rounded QR Card**: The customer card QR code has a one-module white border by default, with softly rounded outer corners. One module is one QR square, not one screen pixel. Existing excess white space is normalized without resizing or changing the QR data. Choose **2** or **4** modules in the Dark Mode patch options if needed; four is the standard quiet-zone width. Decoding tests composite the rounded card onto a dark surface. Linear barcodes keep their original layout, and QR styling also works when Weekly Deals Sorting is disabled.
+Overrides the central Action palette with an OLED-oriented dark theme:
+- **True Black Background**: Overrides the central `ai.b` palette with a `#000000` app background, neutral gray surfaces (`#0D0D0D`, `#1A1A1A`), and `#151515` card tiles. The startup window and splash screen also use black when Dark Splash Screen is selected.
+- **Product Card Contrast**: Keeps product photos on a slightly raised gray card surface so dark items remain visible against the black app background.
+- **Saturated Accents**: Defines 78 coordinated surface, text, border and accent tokens. Blue, cyan, green, orange, pink and purple highlights sit on neutral gray containers instead of tinted backgrounds. Previously omitted middle shades are covered, and popup menus use the same card surface. Only fields present in the matched palette are patched. Regression tests check text contrast on the intended surfaces and colored containers.
+- **Compact Rounded QR Card**: The customer card QR code has a one-module white border by default, with softly rounded outer corners. One module is one QR square, not one screen pixel. Existing excess white space is normalized. Low-resolution bitmaps are enlarged by an integer factor with nearest-neighbor copying before rounding, preserving every QR module while giving the corners enough pixels for smooth edges. Extra upscaling is limited to a 1024-pixel card; larger originals are not reduced. Bitmap density is adjusted with the scale to preserve intrinsic logical dimensions where a density is specified. Choose **2** or **4** modules in the Dark Mode patch options if needed; four is the standard quiet-zone width. Decoding tests composite the rounded card onto a dark surface. Linear barcodes keep their original layout, and QR styling also works when Weekly Deals Sorting is disabled.
 
 ### Dark Splash Screen
 Eliminates the jarring white flash on app startup by overriding window background and splash screen styles in `styles.xml`.
